@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,8 +27,11 @@ public class ProductController {
         return productService.getProducts();
     }
     
-    @GetMapping("/products/{FIELD}/{value}")
-    public List<Product> getProductsByValue(@PathVariable String FIELD, @PathVariable String value) throws ExecutionException, InterruptedException{
+    @GetMapping("/products/{FIELD}/{value}") // ?type=...
+    public List<Product> getProductsByValue(@PathVariable String FIELD, @PathVariable String value, @RequestParam String type) throws ExecutionException, InterruptedException{
+        if ("number".equals(type) | "Number".equals(type) | "int".equals(type)){
+            return productService.getProductsByValue(FIELD, Integer.parseInt(value));
+        }
         return productService.getProductsByValue(FIELD, value);
     }
     
@@ -36,7 +40,7 @@ public class ProductController {
         return productService.getProductsByRange(FIELD, min, max);
     }
     
-    @GetMapping("/products/{FIELD}/{limitValue}")
+    @GetMapping("/products/order/{FIELD}/limit/{limitValue}")
     public List<Product> getProductsOrderedAndLimited(String FIELD, int limitValue) throws ExecutionException, InterruptedException{
         return productService.getProductsOrderedAndLimited(FIELD, limitValue);
     }
