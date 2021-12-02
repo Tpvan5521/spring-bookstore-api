@@ -18,9 +18,9 @@ public class UserController {
     @Autowired
     private UserService userService;
     
-    @GetMapping("/users/{userSlug}")
-    public User getUser(@PathVariable String userSlug) throws ExecutionException, InterruptedException{
-        return userService.getUser(userSlug);
+    @GetMapping("/users/{UID}")
+    public User getUser(@PathVariable String UID) throws ExecutionException, InterruptedException{
+        return userService.getUser(UID);
     }
     
     @PostMapping("/users")
@@ -28,8 +28,8 @@ public class UserController {
         return userService.createUser(user);
     }
     
-    @PutMapping("/users/{userSlug}")
-    public String updateUser(@PathVariable String userSlug, @RequestBody User user) throws ExecutionException, InterruptedException{
-        return userService.updateUser(userSlug, user);
+    @PutMapping("/users/{UID}")
+    public String updateUser(@PathVariable String UID, @RequestBody User user) throws ExecutionException, InterruptedException{
+        return userService.updateUser(UID, user);
     }
 }

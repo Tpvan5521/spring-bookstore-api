@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 
 @Service("userService")
 public class UserService {
-    
+
     private static final String USERS_COLLECTION = "users";
 
-    public User getUser(String userSlug) throws InterruptedException, ExecutionException {
+    public User getUser(String UID) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference users = DB.collection(USERS_COLLECTION);
-        Query query = users.whereEqualTo("userSlug", userSlug);
+        Query query = users.whereEqualTo("UID", UID);
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
         User user = null;
 
@@ -36,23 +36,27 @@ public class UserService {
     }
 
     public String createUser(User user) throws InterruptedException, ExecutionException {
-        Firestore DB = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> collectionApi = DB.collection(USERS_COLLECTION).document().set(user);
-        return collectionApi.get().getUpdateTime().toString();
+        String message = updateUser(USERS_COLLECTION, user);
+        if ("Failed to update".equals(message)) {
+            Firestore DB = FirestoreClient.getFirestore();
+            ApiFuture<WriteResult> future = DB.collection(USERS_COLLECTION).document().set(user);
+            return future.get().getUpdateTime().toString();
+        }
+        return "";
     }
 
-    public String updateUser(String userSlug, User user) throws InterruptedException, ExecutionException {
+    public String updateUser(String UID, User user) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference users = DB.collection(USERS_COLLECTION);
-        Query query = users.whereEqualTo("userSlug", userSlug);
+        Query query = users.whereEqualTo("UID", UID);
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
         for (DocumentSnapshot snapshot : querySnapshot.get().getDocuments()) {
             ApiFuture<WriteResult> future = DB.collection(USERS_COLLECTION).document(snapshot.getId()).set(user);
-            return future.get().getUpdateTime().toString();
+            return "Successfully updated at " + future.get().getUpdateTime().toString();
         }
-        
-        return "Failed";
+
+        return "Failed to update";
     }
 
 }
