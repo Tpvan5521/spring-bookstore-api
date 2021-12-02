@@ -1,20 +1,19 @@
 package com.example.bookstoreapi.entity;
 
-import com.example.bookstoreapi.util.Util;
-
 public final class User {
 
     private final String UID; // cannot re-set
     private String fullname;
     private final String phoneNumber; // cannot re-set
     private String address;
-    private String userSlug;
+    private String imgUrl;
 
-    public User(String UID, String fullname, String phoneNumber, String address, String userSlug) {
+    public User(String UID, String fullname, String phoneNumber, String address, String imgUrl) {
         this.UID = UID;
-        setFullname(fullname);
+        this.fullname = fullname;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.imgUrl = imgUrl;
     }
 
     public String getUID() {
@@ -27,7 +26,6 @@ public final class User {
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
-        this.userSlug = Util.parseStringToSlug(Util.nonAccentVietnamese(fullname), 999999999, 100000000);
     }
 
     public String getPhoneNumber() {
@@ -42,12 +40,12 @@ public final class User {
         this.address = address;
     }
 
-    public String getUserId() {
-        return userSlug;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setUserId(String userSlug) {
-        this.userSlug = userSlug;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
 }

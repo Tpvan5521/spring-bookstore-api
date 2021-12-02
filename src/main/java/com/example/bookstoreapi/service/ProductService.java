@@ -88,8 +88,8 @@ public class ProductService {
 
     public String createProduct(Product product) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> collectionApi = DB.collection(PRODUCTS_COLLECTION).document().set(product);
-        return collectionApi.get().getUpdateTime().toString();
+        ApiFuture<WriteResult> future = DB.collection(PRODUCTS_COLLECTION).document().set(product);
+        return "Successfully created at " + future.get().getUpdateTime().toString();
     }
 
     public String updateProduct(String productSlug, Product product) throws InterruptedException, ExecutionException {
