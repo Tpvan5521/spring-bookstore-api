@@ -33,7 +33,6 @@ public final class Product {
         this.percentSaleOff = percentSaleOff;
     }
     
-
     public String getProductSlug() {
         return productSlug;
     }
@@ -87,16 +86,16 @@ public final class Product {
         this.category = category;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
     public String getImgUrl() {
         return imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     public void setPrice(int price) {

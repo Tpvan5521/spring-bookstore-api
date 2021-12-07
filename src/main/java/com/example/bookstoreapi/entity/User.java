@@ -2,11 +2,14 @@ package com.example.bookstoreapi.entity;
 
 public final class User {
 
-    private final String UID; // cannot re-set
+    private String UID; // cannot re-set
     private String fullname;
-    private final String phoneNumber; // cannot re-set
+    private String phoneNumber; // cannot re-set
     private String address;
     private String imgUrl;
+
+    public User() {
+    }
 
     public User(String UID, String fullname, String phoneNumber, String address, String imgUrl) {
         this.UID = UID;
@@ -18,6 +21,10 @@ public final class User {
 
     public String getUID() {
         return UID;
+    }
+
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 
     public String getFullname() {

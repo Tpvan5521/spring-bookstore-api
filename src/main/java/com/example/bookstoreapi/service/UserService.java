@@ -21,7 +21,7 @@ public class UserService {
     public User getUser(String UID) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference users = DB.collection(USERS_COLLECTION);
-        Query query = users.whereEqualTo("UID", UID);
+        Query query = users.whereEqualTo("uid", UID);
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
         User user = null;
 
@@ -48,7 +48,7 @@ public class UserService {
     public String updateUser(String UID, User user) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference users = DB.collection(USERS_COLLECTION);
-        Query query = users.whereEqualTo("UID", UID);
+        Query query = users.whereEqualTo("uid", UID);
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
         for (DocumentSnapshot snapshot : querySnapshot.get().getDocuments()) {
