@@ -20,7 +20,7 @@ public class CartItemService {
 
     private static final String CARTITEMS_COLLECTION = "cartItems";
 
-    public List<CartItem> getCartItem(String userId) throws InterruptedException, ExecutionException {
+    public List<CartItem> getCartItems(String userId) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference cartItems = DB.collection(CARTITEMS_COLLECTION);
         Query query = cartItems.whereEqualTo("userId", userId);
@@ -40,35 +40,35 @@ public class CartItemService {
     public String createCartItem(CartItem cartItem) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         ApiFuture<WriteResult> collectionApi = DB.collection(CARTITEMS_COLLECTION).document().set(cartItem);
-        return collectionApi.get().getUpdateTime().toString();
+        return "Successfully created at " + collectionApi.get().getUpdateTime().toString();
     }
 
-    public String updateCartItem(String productId, CartItem cartItem) throws InterruptedException, ExecutionException {
+    public String updateCartItem(String userId, String productId, CartItem cartItem) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference cartItems = DB.collection(CARTITEMS_COLLECTION);
-        Query query = cartItems.whereEqualTo("productId", productId);
+        Query query = cartItems.whereEqualTo("productId", productId).whereEqualTo("userId", userId);
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
         for (DocumentSnapshot snapshot : querySnapshot.get().getDocuments()) {
             ApiFuture<WriteResult> future = DB.collection(CARTITEMS_COLLECTION).document(snapshot.getId()).set(cartItem);
-            return future.get().getUpdateTime().toString();
+            return "Successfully updated at " + future.get().getUpdateTime().toString();
         }
 
-        return "Failed";
+        return "Failed to update";
     }
 
-    public String deleteCartItem(String productId) throws InterruptedException, ExecutionException {
+    public String deleteCartItem(String userId, String productId) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference cartItems = DB.collection(CARTITEMS_COLLECTION);
-        Query query = cartItems.whereEqualTo("productId", productId);
+        Query query = cartItems.whereEqualTo("productId", productId).whereEqualTo("userId", userId);
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
         for (DocumentSnapshot snapshot : querySnapshot.get().getDocuments()) {
             ApiFuture<WriteResult> future = cartItems.document(snapshot.getId()).delete();
-            return future.get().getUpdateTime().toString();
+            return "Successfully deleted at " + future.get().getUpdateTime().toString();
         }
         
-        return "Failed";
+        return "Failed to delete";
     }
 
 }

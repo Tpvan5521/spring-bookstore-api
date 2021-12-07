@@ -20,26 +20,26 @@ public class CartItemController {
     @Autowired
     private CartItemService cartItemService;
     
-    @GetMapping("/cart/{userId}")
-    public List<CartItem> getCartItem(@PathVariable String userId) throws ExecutionException, InterruptedException{
-        return cartItemService.getCartItem(userId);
+    @GetMapping("/carts/{userId}")
+    public List<CartItem> getCartItems(@PathVariable String userId) throws ExecutionException, InterruptedException{
+        return cartItemService.getCartItems(userId);
     }
     
-    @PostMapping("/cart")
+    @PostMapping("/carts")
     public String createCartItem(@RequestBody CartItem cartItem) throws ExecutionException, InterruptedException{
         return cartItemService.createCartItem(cartItem);
     }
     
-    @PutMapping("/cart/{productId}")
-    public String updateCartItem(@PathVariable String productId, @RequestBody CartItem cartItem) throws ExecutionException, InterruptedException{
+    @PutMapping("/carts/{userId}/{productId}")
+    public String updateCartItem(@PathVariable String userId, @PathVariable String productId, @RequestBody CartItem cartItem) throws ExecutionException, InterruptedException{
         if(cartItem.getQuantity() <= 0) {
-            return cartItemService.deleteCartItem(productId);
+            return cartItemService.deleteCartItem(userId, productId);
         }
-        return cartItemService.updateCartItem(productId, cartItem);
+        return cartItemService.updateCartItem(userId, productId, cartItem);
     }
     
-    @DeleteMapping("/cart/{productId}")
-    public String deleteProduct(@PathVariable String productId) throws ExecutionException, InterruptedException{
-        return cartItemService.deleteCartItem(productId);
+    @DeleteMapping("/carts/{userId}/{productId}")
+    public String deleteProduct(@PathVariable String userId, @PathVariable String productId) throws ExecutionException, InterruptedException{
+        return cartItemService.deleteCartItem(userId, productId);
     }
 }
