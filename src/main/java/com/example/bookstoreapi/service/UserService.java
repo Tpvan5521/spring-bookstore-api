@@ -18,6 +18,33 @@ public class UserService {
 
     private static final String USERS_COLLECTION = "users";
 
+    public String getUserId(String UID) throws InterruptedException, ExecutionException {
+        Firestore DB = FirestoreClient.getFirestore();
+        CollectionReference users = DB.collection(USERS_COLLECTION);
+        Query query = users.whereEqualTo("uid", UID);
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+
+        for (DocumentSnapshot snapshot : querySnapshot.get().getDocuments()) {
+            return snapshot.getId();
+        }
+
+        return "";
+    }
+
+    public User getUserByDocId(String userId) throws InterruptedException, ExecutionException {
+        Firestore DB = FirestoreClient.getFirestore();
+        DocumentReference docRef = DB.collection(USERS_COLLECTION).document(userId);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        User user = null;
+        
+        DocumentSnapshot document = future.get();
+        if (document.exists()) {
+            user = document.toObject(User.class);
+        }
+        
+        return user;
+    }
+
     public User getUser(String UID) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference users = DB.collection(USERS_COLLECTION);
@@ -36,8 +63,8 @@ public class UserService {
     }
 
     public String createUser(User user) throws InterruptedException, ExecutionException {
-        String message = updateUser(USERS_COLLECTION, user);
-        if ("Failed to update".equals(message)) {
+        User existUser = getUser(user.getUID());
+        if (existUser == null) {
             Firestore DB = FirestoreClient.getFirestore();
             ApiFuture<WriteResult> future = DB.collection(USERS_COLLECTION).document().set(user);
             return future.get().getUpdateTime().toString();

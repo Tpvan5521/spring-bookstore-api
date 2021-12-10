@@ -33,6 +33,33 @@ public class ProductService {
         return listProduct;
     }
 
+    public String getProductId(String productSlug) throws InterruptedException, ExecutionException {
+        Firestore DB = FirestoreClient.getFirestore();
+        CollectionReference products = DB.collection(PRODUCTS_COLLECTION);
+        Query query = products.whereEqualTo("productSlug", productSlug);
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+
+        for (DocumentSnapshot snapshot : querySnapshot.get().getDocuments()) {
+            return snapshot.getId();
+        }
+
+        return "";
+    }
+
+    public Product getProductByDocId(String productId) throws InterruptedException, ExecutionException {
+        Firestore DB = FirestoreClient.getFirestore();
+        DocumentReference docRef = DB.collection(PRODUCTS_COLLECTION).document(productId);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        Product product = null;
+        
+        DocumentSnapshot document = future.get();
+        if (document.exists()) {
+            product = document.toObject(Product.class);
+        }
+        
+        return product;
+    }
+
     public List<Product> getProducts() throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference products = DB.collection(PRODUCTS_COLLECTION);

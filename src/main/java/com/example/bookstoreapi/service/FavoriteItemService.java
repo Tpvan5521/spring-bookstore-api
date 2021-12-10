@@ -23,8 +23,8 @@ public class FavoriteItemService {
     public List<FavoriteItem> getFavoriteItems(String userId) throws InterruptedException, ExecutionException {
         Firestore DB = FirestoreClient.getFirestore();
         CollectionReference favoriteItems = DB.collection(FAVORITEITEMS_COLLECTION);
-        Query query = favoriteItems.whereEqualTo("userId", userId);
-        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        Query query = favoriteItems.whereEqualTo("userId", userId); 
+       ApiFuture<QuerySnapshot> querySnapshot = query.get();
         List<FavoriteItem> listFavoriteItem = new ArrayList<>();
 
         for (DocumentSnapshot snapshot : querySnapshot.get().getDocuments()) {
