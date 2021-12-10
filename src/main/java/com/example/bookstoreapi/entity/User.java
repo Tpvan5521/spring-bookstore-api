@@ -7,16 +7,18 @@ public final class User {
     private String phoneNumber; // cannot re-set
     private String address;
     private String imgUrl;
+    private String email;
 
     public User() {
     }
 
-    public User(String UID, String fullname, String phoneNumber, String address, String imgUrl) {
+    public User(String UID, String fullname, String phoneNumber, String address, String imgUrl, String email) {
         this.UID = UID;
         this.fullname = fullname;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imgUrl = imgUrl;
+        this.email = email;
     }
 
     public String getUID() {
@@ -39,6 +41,10 @@ public final class User {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -55,4 +61,12 @@ public final class User {
         this.imgUrl = imgUrl;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
 }
